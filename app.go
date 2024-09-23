@@ -33,12 +33,22 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
+type Frontmatter struct {
+	Title       string   `json:"title"`
+	IsFavourite bool     `json:"isFavourite"`
+	Tags        []string `json:"tags"`
+	Path        string   `json:"path"`
+	Filename    string   `json:"filename"`
+	CreatedAt   string   `json:"createdAt"`
+	UpdatedAt   string   `json:"updatedAt"`
+}
+
+// Modify your function to return []Frontmatter instead of []map[string]interface{}
+func (a *App) WalkFrontmatter() ([]Frontmatter, error) {
 	folderPath := "./data"
 
-	var data []map[string]interface{}
+	var data []Frontmatter
 
-	// WalkDir walks the directory tree and calls the function for each file or directory.
 	err := filepath.WalkDir(folderPath, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -46,13 +56,11 @@ func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
 
 		log.Printf("Info: Walking %s", path)
 
-		// Check if the entry is a regular file
 		if !d.IsDir() {
-			// Read the file content
 			content, err := os.ReadFile(path)
 			if err != nil {
 				log.Printf("Error reading file %s: %v", path, err)
-				return nil // Skip this file but continue walking
+				return nil
 			}
 
 			var matter struct {
@@ -66,17 +74,17 @@ func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
 			_, err = frontmatter.Parse(strings.NewReader(string(content)), &matter)
 			if err != nil {
 				log.Printf("Error parsing front matter for %s: %v", path, err)
-				return nil // Skip this file but continue walking
+				return nil
 			}
 
-			data = append(data, map[string]interface{}{
-				"title":       matter.Title,
-				"isFavourite": matter.Favourite,
-				"tags":        matter.Tags,
-				"path":        path,
-				"filename":    d.Name(),
-				"createdAt":   matter.CreatedAt,
-				"updatedAt":   matter.UpdatedAt,
+			data = append(data, Frontmatter{
+				Title:       matter.Title,
+				IsFavourite: matter.Favourite,
+				Tags:        matter.Tags,
+				Path:        path,
+				Filename:    d.Name(),
+				CreatedAt:   matter.CreatedAt,
+				UpdatedAt:   matter.UpdatedAt,
 			})
 		}
 

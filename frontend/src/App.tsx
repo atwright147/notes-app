@@ -1,11 +1,11 @@
 import "@/App.css";
 
-import { useFrontmatterQuery } from "@/hooks/getFrontmatter";
+import { useFrontmatterQuery } from "@/hooks/useFrontmatterQuery";
 
 export const App = () => {
 	const {
 		data: frontmatter,
-		isSuccess: isFrontmatterSuccess,
+		isLoading: isFrontmatterLoading,
 		isError: isFrontmatterError,
 		refetch: refetchFrontmatter,
 		isFetching: isFrontmatterFetching,
@@ -15,6 +15,10 @@ export const App = () => {
 		await refetchFrontmatter();
 	};
 
+	if (isFrontmatterLoading || isFrontmatterError) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<div id="App">
 			<h1>Notes</h1>
@@ -23,7 +27,16 @@ export const App = () => {
 				Refresh
 			</button>
 
-			{isFrontmatterSuccess && !isFrontmatterError && (
+			<nav aria-label="files">
+				{/* @ts-ignore */}
+				{frontmatter?.map((item) => (
+					<a href={`./data/${item}`} key={item.path}>
+						{item.title}
+					</a>
+				))}
+			</nav>
+
+			{!isFrontmatterLoading && !isFrontmatterError && (
 				<pre>{JSON.stringify(frontmatter, null, 2)}</pre>
 			)}
 		</div>
