@@ -1,37 +1,56 @@
-import {useState} from 'react';
-import logo from './assets/images/logo-universal.png';
-import './App.css';
+import { useState } from "react";
+import logo from "./assets/images/logo-universal.png";
+import "./App.css";
 import { Greet, WalkFrontmatter } from "../wailsjs/go/main/App";
 
 function App() {
-	const [resultText, setResultText] = useState("Please enter your name below 👇");
+	const [resultText, setResultText] = useState(
+		"Please enter your name below 👇",
+	);
 	const [frontmatter, setFrontmatter] = useState({});
-	const [name, setName] = useState('');
-	const updateName = (e: any) => setName(e.target.value);
-	const updateResultText = (result: string) => setResultText(result);
+	const [name, setName] = useState("");
+	const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
+		setName(event.target.value);
+	};
+	const updateResultText = (result: string): void => setResultText(result);
 
-	function greet() {
+	function greet(): void {
 		Greet(name).then(updateResultText);
 	}
 
 	const handleWalkFrontmatter = async () => {
 		const result = await WalkFrontmatter();
 		setFrontmatter(result);
-	}
+	};
 
 	return (
 		<div id="App">
-			<img src={logo} id="logo" alt="logo"/>
-			<div id="result" className="result">{resultText}</div>
+			<img src={logo} id="logo" alt="logo" />
+			<div id="result" className="result">
+				{resultText}
+			</div>
 			<div id="input" className="input-box">
-				<input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-				<button className="btn" onClick={greet}>Greet</button>
+				<input
+					id="name"
+					className="input"
+					onChange={updateName}
+					autoComplete="off"
+					name="input"
+					type="text"
+				/>
+				<button className="btn" onClick={greet} type="button">
+					Greet
+				</button>
 			</div>
 
-			<pre style={{ textAlign: 'left' }}>{JSON.stringify(frontmatter, null, 2)}</pre>
-			<button className="btn" onClick={handleWalkFrontmatter}>Walk Frontmatter</button>
+			<button className="btn" onClick={handleWalkFrontmatter} type="button">
+				Walk Frontmatter
+			</button>
+			<pre style={{ textAlign: "left" }}>
+				{JSON.stringify(frontmatter, null, 2)}
+			</pre>
 		</div>
-	)
+	);
 }
 
-export default App
+export default App;
