@@ -44,6 +44,8 @@ func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
 			return err
 		}
 
+		log.Printf("Info: Walking %s", path)
+
 		// Check if the entry is a regular file
 		if !d.IsDir() {
 			// Read the file content
@@ -75,9 +77,7 @@ func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
 				"filename":    d.Name(),
 				"createdAt":   matter.CreatedAt,
 				"updatedAt":   matter.UpdatedAt,
-				"content":     string(content),
 			})
-
 		}
 
 		return nil
@@ -88,4 +88,30 @@ func (a *App) WalkFrontmatter() ([]map[string]interface{}, error) {
 	}
 
 	return data, nil
+}
+
+func (a *App) GetNote(path string) string {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatalf("Error walking directory: %v", err)
+	}
+
+	return string(content)
+}
+
+// save note
+func (a *App) SaveNote(path string, content string) error {
+	err := os.WriteFile(path, []byte(content), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *App) DeleteNote(path string) error {
+	err := os.Remove(path)
+	if err != nil {
+		return err
+	}
+	return nil
 }

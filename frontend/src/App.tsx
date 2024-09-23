@@ -1,42 +1,31 @@
-import { useEffect, useState } from "react";
-
-import { WalkFrontmatter } from "../wailsjs/go/main/App";
 import "@/App.css";
 
-export const App = () => {
-	const [frontmatter, setFrontmatter] = useState({});
+import { useFrontmatterQuery } from "@/hooks/getFrontmatter";
 
-	useEffect(() => {
-		async () => {
-			try {
-				const result = await WalkFrontmatter();
-				setFrontmatter(result);
-			} catch (err) {
-				console.info(err);
-			}
-		};
-	}, []);
+export const App = () => {
+	const {
+		data: frontmatter,
+		isSuccess: isFrontmatterSuccess,
+		isError: isFrontmatterError,
+		refetch: refetchFrontmatter,
+		isFetching: isFrontmatterFetching,
+	} = useFrontmatterQuery();
 
 	const handleClick = async () => {
-		try {
-			const result = await WalkFrontmatter();
-			setFrontmatter(result);
-		} catch (err) {
-			console.info(err);
-		}
+		await refetchFrontmatter();
 	};
 
 	return (
 		<div id="App">
-			<h1 style={{ textAlign: "left" }}>Notes</h1>
+			<h1>Notes</h1>
 
 			<button type="button" onClick={handleClick}>
 				Refresh
 			</button>
 
-			<pre style={{ textAlign: "left" }}>
-				{JSON.stringify(frontmatter, null, 2)}
-			</pre>
+			{isFrontmatterSuccess && !isFrontmatterError && (
+				<pre>{JSON.stringify(frontmatter, null, 2)}</pre>
+			)}
 		</div>
 	);
 };
