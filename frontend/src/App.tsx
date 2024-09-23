@@ -28,9 +28,8 @@ export const App = () => {
 			</button>
 
 			<nav aria-label="files">
-				{/* @ts-ignore */}
 				{frontmatter?.map((item) => (
-					<a href={`./data/${item}`} key={item.path}>
+					<a href={item.path} key={item.path}>
 						{item.title}
 					</a>
 				))}

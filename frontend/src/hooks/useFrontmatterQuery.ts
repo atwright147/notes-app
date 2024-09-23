@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
+import type { Frontmatter } from "@/../types/frontmatter";
 import { WalkFrontmatter } from "@/../wailsjs/go/main/App";
-
-type FrontmatterType = ReturnType<typeof WalkFrontmatter>;
 
 const QUERY_KEY = ["frontmatter", "all"];
 
-const getFrontmatter = async (): Promise<FrontmatterType> => {
+const getFrontmatter = async (): Promise<Frontmatter[]> => {
 	try {
 		return WalkFrontmatter();
 	} catch (err) {
@@ -16,7 +15,7 @@ const getFrontmatter = async (): Promise<FrontmatterType> => {
 };
 
 export const useFrontmatterQuery = () => {
-	return useQuery<FrontmatterType, Error>({
+	return useQuery<Frontmatter[], Error>({
 		queryKey: QUERY_KEY,
 		queryFn: getFrontmatter,
 		staleTime: 0,
