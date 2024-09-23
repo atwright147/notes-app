@@ -1,56 +1,42 @@
-import { useState } from "react";
-import logo from "./assets/images/logo-universal.png";
-import "./App.css";
-import { Greet, WalkFrontmatter } from "../wailsjs/go/main/App";
+import { useEffect, useState } from "react";
 
-function App() {
-	const [resultText, setResultText] = useState(
-		"Please enter your name below 👇",
-	);
+import { WalkFrontmatter } from "../wailsjs/go/main/App";
+import "@/App.css";
+
+export const App = () => {
 	const [frontmatter, setFrontmatter] = useState({});
-	const [name, setName] = useState("");
-	const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
-		setName(event.target.value);
-	};
-	const updateResultText = (result: string): void => setResultText(result);
 
-	function greet(): void {
-		Greet(name).then(updateResultText);
-	}
+	useEffect(() => {
+		async () => {
+			try {
+				const result = await WalkFrontmatter();
+				setFrontmatter(result);
+			} catch (err) {
+				console.info(err);
+			}
+		};
+	}, []);
 
-	const handleWalkFrontmatter = async () => {
-		const result = await WalkFrontmatter();
-		setFrontmatter(result);
+	const handleClick = async () => {
+		try {
+			const result = await WalkFrontmatter();
+			setFrontmatter(result);
+		} catch (err) {
+			console.info(err);
+		}
 	};
 
 	return (
 		<div id="App">
-			<img src={logo} id="logo" alt="logo" />
-			<div id="result" className="result">
-				{resultText}
-			</div>
-			<div id="input" className="input-box">
-				<input
-					id="name"
-					className="input"
-					onChange={updateName}
-					autoComplete="off"
-					name="input"
-					type="text"
-				/>
-				<button className="btn" onClick={greet} type="button">
-					Greet
-				</button>
-			</div>
+			<h1 style={{ textAlign: "left" }}>Notes</h1>
 
-			<button className="btn" onClick={handleWalkFrontmatter} type="button">
-				Walk Frontmatter
+			<button type="button" onClick={handleClick}>
+				Refresh
 			</button>
+
 			<pre style={{ textAlign: "left" }}>
 				{JSON.stringify(frontmatter, null, 2)}
 			</pre>
 		</div>
 	);
-}
-
-export default App;
+};
