@@ -1,32 +1,30 @@
-import { Editor, rootCtx } from "@milkdown/kit/core";
-import { defaultValueCtx } from "@milkdown/kit/core";
-import { commonmark } from "@milkdown/kit/preset/commonmark";
-import { listener, listenerCtx } from "@milkdown/plugin-listener";
-import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
-import { nord } from "@milkdown/theme-nord";
-import { type FC, useMemo } from "react";
+import { Editor, rootCtx } from '@milkdown/kit/core';
+import { defaultValueCtx } from '@milkdown/kit/core';
+import { commonmark } from '@milkdown/kit/preset/commonmark';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
+import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
+import { nord } from '@milkdown/theme-nord';
+import { type FC, useMemo } from 'react';
 
-import { useNoteQuery } from "@/hooks/useNoteQuery";
-import { useNotesStore } from "@/stores/notes.store";
+import { useNoteQuery } from '@/hooks/useNoteQuery';
+import { useNotesStore } from '@/stores/notes.store';
 
 interface MilkdownEditorProps {
 	defaultValue: string;
 }
 
 const stripFrontmatter = (markdown: string | undefined): string => {
-	if (!markdown) return "";
+	if (!markdown) return '';
 
 	const frontmatterRegex = /^---\s*[\s\S]*?\s*---\s*/;
-	return markdown.replace(frontmatterRegex, "");
+	return markdown.replace(frontmatterRegex, '');
 };
+
+const defaultValue = 'Click a note to open it here';
 
 const MilkdownEditor: FC = (): JSX.Element => {
 	const { selected } = useNotesStore();
-	const {
-		data: note,
-		isLoading: isNoteLoading,
-		isError: isNoteError,
-	} = useNoteQuery(selected ?? "");
+	const { data: note, isLoading: isNoteLoading, isError: isNoteError } = useNoteQuery(selected ?? '');
 
 	const markdown = useMemo(() => stripFrontmatter(note), [note]);
 
@@ -39,7 +37,7 @@ const MilkdownEditor: FC = (): JSX.Element => {
 					ctx.set(rootCtx, root);
 					// ctx.set(defaultValueCtx, defaultValue);
 					ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
-						console.log("Updated markdown:", markdown);
+						console.log('Updated markdown:', markdown);
 					});
 				})
 				.use(commonmark)
@@ -53,13 +51,7 @@ const MilkdownEditor: FC = (): JSX.Element => {
 export const NoteView = () => {
 	const { selected } = useNotesStore();
 
-	const {
-		data: note,
-		isLoading: isNoteLoading,
-		isError: isNoteError,
-	} = useNoteQuery(selected ?? "");
-
-	console.info("render");
+	const { data: note, isLoading: isNoteLoading, isError: isNoteError } = useNoteQuery(selected ?? '');
 
 	const markdown = useMemo(() => stripFrontmatter(note), [note]);
 
