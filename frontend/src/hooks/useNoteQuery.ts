@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { GetNote } from "@/../wailsjs/go/main/App";
+import { GetNote } from '@/../wailsjs/go/main/App';
 
 const getNote = async (path: string): Promise<string> => {
 	try {
@@ -13,7 +13,7 @@ const getNote = async (path: string): Promise<string> => {
 
 export const useNoteQuery = (path: string) => {
 	return useQuery<string, Error>({
-		queryKey: ["file", path],
+		queryKey: ['file', path],
 		queryFn: () => getNote(path),
 		staleTime: 0,
 		gcTime: 0,

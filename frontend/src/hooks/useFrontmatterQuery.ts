@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import type { Frontmatter } from "@/../types/frontmatter";
-import { WalkFrontmatter } from "@/../wailsjs/go/main/App";
+import type { Frontmatter } from '@/../types/frontmatter';
+import { WalkFrontmatter } from '@/../wailsjs/go/main/App';
 
-const QUERY_KEY = ["frontmatter", "all"];
+const QUERY_KEY = ['frontmatter', 'all'];
 
 const getFrontmatter = async (): Promise<Frontmatter[]> => {
 	try {
