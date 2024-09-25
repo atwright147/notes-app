@@ -1,0 +1,10 @@
+@import '@adobe/spectrum-css/vars/spectrum-medium.css';
+
+.linkList {
+	display: flex;
+	flex-direction: column;
+}
+
+.link {
+	padding: var(--spectrum-global-dimension-size-100);
+}

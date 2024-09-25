@@ -98,13 +98,27 @@ func (a *App) WalkFrontmatter() ([]Frontmatter, error) {
 	return data, nil
 }
 
-func (a *App) GetNote(path string) string {
-	content, err := os.ReadFile(path)
+func (a *App) GetNote(path string) (string, error) {
+	absPath, err := filepath.Abs(path)
 	if err != nil {
-		log.Fatalf("Error walking directory: %v", err)
+		return "", err
 	}
 
-	return string(content)
+	fi, err := os.Stat(absPath)
+	if err != nil {
+		return "", err
+	}
+
+	if fi.IsDir() {
+		return "", fmt.Errorf("path is a directory")
+	}
+
+	content, err := os.ReadFile(absPath)
+	if err != nil {
+		return "", err
+	}
+
+	return string(content), nil
 }
 
 // save note
