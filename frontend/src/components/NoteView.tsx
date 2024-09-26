@@ -20,8 +20,6 @@ const stripFrontmatter = (markdown: string | undefined): string => {
 	return markdown.replace(frontmatterRegex, '');
 };
 
-const defaultValue = 'Click a note to open it here';
-
 const MilkdownEditor: FC = (): JSX.Element => {
 	const { selected } = useNotesStore();
 	const { data: note, isLoading: isNoteLoading, isError: isNoteError } = useNoteQuery(selected ?? '');
@@ -35,7 +33,6 @@ const MilkdownEditor: FC = (): JSX.Element => {
 				.config((ctx) => {
 					ctx.set(defaultValueCtx, markdown);
 					ctx.set(rootCtx, root);
-					// ctx.set(defaultValueCtx, defaultValue);
 					ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
 						console.log('Updated markdown:', markdown);
 					});
