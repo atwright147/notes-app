@@ -23,6 +23,7 @@ import {
 	Heading,
 	TextField,
 } from "@adobe/react-spectrum";
+import { useConfigStoreQuery } from "../hooks/useConfigStoreQuery";
 
 interface FormValues {
 	notesDir: string;
@@ -37,6 +38,11 @@ export const NoteView = () => {
 		isLoading: isNoteLoading,
 		isError: isNoteError,
 	} = useNoteQuery(selected ?? "");
+	const {
+		data: config,
+		isLoading: isConfigLoading,
+		isError: isConfigError,
+	} = useConfigStoreQuery();
 
 	const saveNoteMutation = useMutation({
 		mutationFn: (): Promise<void> => {
@@ -78,6 +84,10 @@ export const NoteView = () => {
 	};
 
 	const handleOpenSettingsDialog = (): void => {
+		if (config?.notesDir) {
+			setNotesDir(config.notesDir);
+		}
+
 		setShowSettingsDialog(true);
 	};
 

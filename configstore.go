@@ -38,8 +38,9 @@ func NewConfigStore() (*ConfigStore, error) {
 	}, nil
 }
 
-func (s *ConfigStore) Config() (Config, error) {
-	_, err := os.Stat(s.configPath)
+// Config returns the configuration from the config file, or the default config if the file does not exist.
+func (s *ConfigStore) Config() (config Config, err error) {
+	_, err = os.Stat(s.configPath)
 	if os.IsNotExist(err) {
 		return DefaultConfig(), nil
 	}
@@ -58,7 +59,7 @@ func (s *ConfigStore) Config() (Config, error) {
 		return DefaultConfig(), nil
 	}
 
-	cfg := Config{}
+	var cfg Config
 	if err := json.Unmarshal(buf, &cfg); err != nil {
 		return Config{}, fmt.Errorf("configuration file does not have a valid format: %w", err)
 	}

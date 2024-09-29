@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { GetConfig } from '@/../wailsjs/go/main/App';
+import { GetConfig } from "@/../wailsjs/go/main/App";
+import type { main } from "../../wailsjs/go/models";
 
-const getConfig = async (): Promise<unknown> => {
+const getConfig = async (): Promise<main.Config> => {
 	try {
 		return GetConfig();
 	} catch (err) {
@@ -12,8 +13,8 @@ const getConfig = async (): Promise<unknown> => {
 };
 
 export const useConfigStoreQuery = () => {
-	return useQuery<unknown, Error>({
-		queryKey: ['config', 'all'],
+	return useQuery<main.Config, Error>({
+		queryKey: ["config", "all"],
 		queryFn: () => getConfig(),
 		staleTime: 0,
 		gcTime: 0,
