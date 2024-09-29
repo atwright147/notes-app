@@ -4,9 +4,15 @@ import {main} from '../models';
 
 export function DeleteNote(arg1:string):Promise<void>;
 
+export function GetConfig():Promise<main.Config>;
+
 export function GetNote(arg1:string):Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
+
+export function OpenDirectoryDialog():Promise<string>;
+
+export function SaveFullConfig(arg1:main.Config):Promise<void>;
 
 export function SaveNote(arg1:string,arg2:string):Promise<void>;
 

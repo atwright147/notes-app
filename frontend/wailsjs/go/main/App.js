@@ -6,12 +6,24 @@ export function DeleteNote(arg1) {
   return window['go']['main']['App']['DeleteNote'](arg1);
 }
 
+export function GetConfig() {
+  return window['go']['main']['App']['GetConfig']();
+}
+
 export function GetNote(arg1) {
   return window['go']['main']['App']['GetNote'](arg1);
 }
 
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
+}
+
+export function OpenDirectoryDialog() {
+  return window['go']['main']['App']['OpenDirectoryDialog']();
+}
+
+export function SaveFullConfig(arg1) {
+  return window['go']['main']['App']['SaveFullConfig'](arg1);
 }
 
 export function SaveNote(arg1, arg2) {

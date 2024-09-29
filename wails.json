@@ -1,6 +1,6 @@
 {
 	"$schema": "https://wails.io/schemas/config.v2.json",
-	"name": "Notes",
+	"name": "co.uk.atwright147.notes",
 	"outputfilename": "Notes",
 	"frontend:install": "npm install",
 	"frontend:build": "npm run build",
@@ -9,5 +9,11 @@
 	"author": {
 		"name": "Andy Wright",
 		"email": "atwright147@gmail.com"
+	},
+	"info": {
+		"productName": "Notes",
+		"productVersion": "0.0.1",
+		"copyright": "Copyright © 2024 Andy Wright",
+		"comments": "A simple markdown based Notes application"
 	}
 }

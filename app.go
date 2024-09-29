@@ -10,16 +10,26 @@ import (
 	"strings"
 
 	"github.com/adrg/frontmatter"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx         context.Context
+	configStore *ConfigStore
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	return &App{}
+	configStore, err := NewConfigStore()
+	if err != nil {
+		fmt.Printf("could not initialize the config store: %v\n", err)
+		return &App{}
+	}
+
+	return &App{
+		configStore: configStore,
+	}
 }
 
 // startup is called when the app starts. The context is saved
@@ -31,6 +41,29 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) OpenDirectoryDialog() string {
+	path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "Select Notes Folder",
+	})
+	if err != nil {
+		runtime.LogErrorf(a.ctx, "Error: %+v\n", err)
+	}
+	return path
+}
+
+// GetConfig retrieves the app config and returns it to the frontend
+func (a *App) GetConfig() (Config, error) {
+	cfg, err := a.configStore.Config()
+	if err != nil {
+		return Config{}, fmt.Errorf("could not retrieve the configuration: %w", err)
+	}
+	return cfg, nil
+}
+
+func (a *App) SaveFullConfig(cfg Config) error {
+	return a.configStore.SaveConfig(cfg)
 }
 
 type Frontmatter struct {

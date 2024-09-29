@@ -1,24 +1,49 @@
-import { useMutation } from '@tanstack/react-query';
-import MDEditor from '@uiw/react-md-editor';
-import { useEffect, useState } from 'react';
+import IconFolder from "@spectrum-icons/workflow/Folder";
+import { useMutation } from "@tanstack/react-query";
+import MDEditor from "@uiw/react-md-editor";
+import { useEffect, useState } from "react";
 
-import { SaveNote } from '@/../wailsjs/go/main/App';
-import { useFrontmatter } from '@/hooks/useFrontmatter';
-import { useNoteQuery } from '@/hooks/useNoteQuery';
-import { useNotesStore } from '@/stores/notes.store';
-import { makeFrontmatter } from '@/utils/makeFrontmatter';
+import {
+	OpenDirectoryDialog,
+	SaveFullConfig,
+	SaveNote,
+} from "@/../wailsjs/go/main/App";
+import { useFrontmatter } from "@/hooks/useFrontmatter";
+import { useNoteQuery } from "@/hooks/useNoteQuery";
+import { useNotesStore } from "@/stores/notes.store";
+import { makeFrontmatter } from "@/utils/makeFrontmatter";
+import {
+	Button,
+	ButtonGroup,
+	Content,
+	Dialog,
+	DialogContainer,
+	Divider,
+	Flex,
+	Heading,
+	TextField,
+} from "@adobe/react-spectrum";
+
+interface FormValues {
+	notesDir: string;
+}
 
 export const NoteView = () => {
 	const { selected } = useNotesStore();
-
-	const { data: note, isLoading: isNoteLoading, isError: isNoteError } = useNoteQuery(selected ?? '');
+	const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+	const [notesDir, setNotesDir] = useState("");
+	const {
+		data: note,
+		isLoading: isNoteLoading,
+		isError: isNoteError,
+	} = useNoteQuery(selected ?? "");
 
 	const saveNoteMutation = useMutation({
 		mutationFn: (): Promise<void> => {
-			if (!selected || !value) return Promise.resolve();
+			if (!selected || !markdown) return Promise.resolve();
 
 			const frontmatter = makeFrontmatter(attributes);
-			const content = `${frontmatter}\n\n${value}`;
+			const content = `${frontmatter}\n\n${markdown}`;
 
 			return SaveNote(selected, content);
 		},
@@ -26,24 +51,100 @@ export const NoteView = () => {
 		onError: () => console.info,
 	});
 
+	const saveSettingsMutation = useMutation({
+		mutationFn: (values: FormValues): Promise<void> => {
+			return SaveFullConfig(values);
+		},
+		onSuccess: () => {
+			setShowSettingsDialog(false);
+		},
+		onError: () => console.info,
+	});
+
 	const { attributes, body, bodyBegin, frontmatter } = useFrontmatter(note);
 
-	const [value, setValue] = useState<string | undefined>(body);
+	const [markdown, setMarkdown] = useState<string | undefined>(body);
 
 	useEffect(() => {
-		setValue(body);
+		setMarkdown(body);
 	}, [body]);
 
-	const handleSave = async () => {
-		saveNoteMutation.mutate();
+	const handleSaveNote = async () => {
+		await saveNoteMutation.mutate();
+	};
+
+	const handleSaveSettings = async (data: FormValues): Promise<void> => {
+		await saveSettingsMutation.mutate(data);
+	};
+
+	const handleOpenSettingsDialog = (): void => {
+		setShowSettingsDialog(true);
+	};
+
+	const handleCloseSettingsDialog = (): void => {
+		setShowSettingsDialog(false);
+	};
+
+	const handleLocationDialog = async (): Promise<void> => {
+		const result = await OpenDirectoryDialog();
+		setNotesDir(result);
 	};
 
 	return (
 		<>
-			<button onClick={handleSave} type="button">
-				Save
-			</button>
-			<MDEditor value={value} onChange={setValue} height="100%" />
+			<Flex direction="column" height="100%">
+				<Flex>
+					<button onClick={handleSaveNote} type="button">
+						Save
+					</button>
+					<button onClick={handleOpenSettingsDialog} type="button">
+						Settings
+					</button>
+				</Flex>
+				<MDEditor value={markdown} onChange={setMarkdown} height="100%" />
+			</Flex>
+
+			<DialogContainer type="modal" onDismiss={handleCloseSettingsDialog}>
+				{showSettingsDialog && (
+					<Dialog>
+						<Heading>Settings</Heading>
+						<Divider />
+						<ButtonGroup>
+							<Button variant="secondary" onPress={handleCloseSettingsDialog}>
+								Cancel
+							</Button>
+							<Button
+								autoFocus
+								variant="accent"
+								onPress={() => handleSaveSettings({ notesDir })}
+							>
+								Save
+							</Button>
+						</ButtonGroup>
+
+						<Content>
+							<Flex gap="size-100" direction="row" alignItems="end">
+								<TextField
+									label="Notes Folder"
+									name="notesDir"
+									value={notesDir}
+									onChange={setNotesDir}
+									isRequired
+									width="100%"
+								/>
+								<Button
+									type="button"
+									variant="secondary"
+									onPress={handleLocationDialog}
+									aria-label="Select a folder"
+								>
+									<IconFolder />
+								</Button>
+							</Flex>
+						</Content>
+					</Dialog>
+				)}
+			</DialogContainer>
 		</>
 	);
 };
