@@ -78,7 +78,12 @@ type Frontmatter struct {
 
 // Modify your function to return []Frontmatter instead of []map[string]interface{}
 func (a *App) WalkFrontmatter() ([]Frontmatter, error) {
-	folderPath := "./data"
+	config, configErr := a.GetConfig()
+	if configErr != nil {
+		return nil, fmt.Errorf("could not retrieve the configuration: %w", configErr)
+	}
+
+	folderPath := config.NotesDir
 
 	var data []Frontmatter
 
