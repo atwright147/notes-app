@@ -1,3 +1,14 @@
+import {
+	Button,
+	ButtonGroup,
+	Content,
+	Dialog,
+	DialogContainer,
+	Divider,
+	Flex,
+	Heading,
+	TextField,
+} from "@adobe/react-spectrum";
 import IconFolder from "@spectrum-icons/workflow/Folder";
 import { useMutation } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
@@ -12,17 +23,6 @@ import { useFrontmatter } from "@/hooks/useFrontmatter";
 import { useNoteQuery } from "@/hooks/useNoteQuery";
 import { useNotesStore } from "@/stores/notes.store";
 import { makeFrontmatter } from "@/utils/makeFrontmatter";
-import {
-	Button,
-	ButtonGroup,
-	Content,
-	Dialog,
-	DialogContainer,
-	Divider,
-	Flex,
-	Heading,
-	TextField,
-} from "@adobe/react-spectrum";
 import { useConfigStoreQuery } from "../hooks/useConfigStoreQuery";
 
 interface FormValues {
