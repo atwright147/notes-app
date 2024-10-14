@@ -1,3 +1,12 @@
 [data-milkdown-root], .milkdown, .editor, .milkdown .editor p {
 	height: 100% !important;
 }
+
+.milkdown {
+	display: flex;
+	flex-direction: column;
+
+	.editor {
+		border: 1px solid #333;
+	}
+}
