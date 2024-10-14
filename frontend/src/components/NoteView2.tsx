@@ -4,20 +4,27 @@ import {
 	menu,
 	menuConfigCtx,
 } from "@milkdown-lab/plugin-menu";
-import { Editor, rootCtx } from "@milkdown/kit/core";
+import { Editor, defaultValueCtx, rootCtx } from "@milkdown/kit/core";
 import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { nord } from "@milkdown/theme-nord";
 import type React from "react";
 import "@milkdown-lab/plugin-menu/style.css";
+
+import { useNotesStore } from "@/stores/notes.store";
 import { menuItems } from "./menu-items";
 
-const MilkdownEditor: React.FC = () => {
+interface Props {
+	content: string;
+}
+
+const MilkdownEditor: React.FC<Props> = ({ content }): JSX.Element => {
 	const { get } = useEditor((root) =>
 		Editor.make()
 			.config(nord)
 			.config((ctx) => {
 				ctx.set(rootCtx, root);
+				ctx.set(defaultValueCtx, content ?? "");
 			})
 			.use(commonmark)
 			.config((ctx) => {
@@ -33,10 +40,15 @@ const MilkdownEditor: React.FC = () => {
 	return <Milkdown />;
 };
 
-export const MilkdownEditorWrapper: React.FC = () => {
+export const MilkdownEditorWrapper: React.FC<Props> = ({
+	content,
+}): JSX.Element => {
+	const { selected, setSelected } = useNotesStore();
+
 	return (
 		<MilkdownProvider>
-			<MilkdownEditor />
+			<pre>{JSON.stringify(selected, null, 2)}</pre>
+			<MilkdownEditor content={selected ?? ""} />
 		</MilkdownProvider>
 	);
 };
