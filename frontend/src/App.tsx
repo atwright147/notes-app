@@ -1,16 +1,22 @@
-import "@/App.css";
+import styles from "@/App.module.scss";
 
 import { Grid, Provider, View, defaultTheme } from "@adobe/react-spectrum";
+
+import { useNotesStore } from "@/stores/notes.store";
 import { FileNav } from "./components/FileNav";
 import { MilkdownEditorWrapper } from "./components/NoteView2";
-import { useConfigStoreQuery } from "./hooks/useConfigStoreQuery";
+import { useFrontmatter } from "./hooks/useFrontmatter";
+import { useNoteQuery } from "./hooks/useNoteQuery";
 
 export const App = () => {
+	const selected = useNotesStore((store) => store.selected);
 	const {
-		data: config,
-		isLoading: isConfigLoading,
-		isError: isConfigError,
-	} = useConfigStoreQuery();
+		data: note,
+		isLoading: isNoteLoading,
+		isError: isNoteError,
+	} = useNoteQuery(selected ?? "");
+
+	const { attributes, body, bodyBegin, frontmatter } = useFrontmatter(note);
 
 	return (
 		<Provider theme={defaultTheme} minHeight="100vh">
@@ -22,8 +28,8 @@ export const App = () => {
 				minHeight="100vh"
 				gap="size-300"
 			>
-				<View gridArea="content">
-					<MilkdownEditorWrapper />
+				<View gridArea="content" UNSAFE_className={styles.content}>
+					<MilkdownEditorWrapper content={body} />
 				</View>
 
 				<View gridArea="sidebar" elementType="aside" padding="5px">

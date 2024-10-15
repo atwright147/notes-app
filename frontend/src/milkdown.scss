@@ -1,12 +1,16 @@
-[data-milkdown-root], .milkdown, .editor, .milkdown .editor p {
-	height: 100% !important;
-}
+// [data-milkdown-root], .milkdown, .editor {
+// 	height: 100% !important;
+// }
 
-.milkdown {
-	display: flex;
-	flex-direction: column;
+// .milkdown {
+// 	display: flex;
+// 	flex-direction: column;
 
-	.editor {
-		border: 1px solid #333;
-	}
-}
+// 	.editor {
+// 		--padding: 1rem;
+// 		border: 1px solid #333;
+// 		padding-left: var(--padding);
+// 		padding-right: var(--padding);
+// 		// overflow: auto;
+// 	}
+// }

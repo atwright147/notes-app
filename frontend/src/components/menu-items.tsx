@@ -3,7 +3,6 @@ import { editorStateCtx, prosePluginsCtx, schemaCtx } from "@milkdown/core";
 import type { Ctx } from "@milkdown/ctx";
 import type { MarkType } from "@milkdown/prose/model";
 import type { EditorState } from "@milkdown/prose/state";
-import IconFolder from "@spectrum-icons/workflow/Folder";
 
 const createIconContent = (icon: string) => {
 	const span = document.createElement("span");
@@ -51,7 +50,7 @@ export const menuItems: MenuConfigItem[][] = [
 			key: "Undo",
 			disabled: (ctx: Ctx) => {
 				try {
-					if (!!ctx.get("historyProviderConfig")) {
+					if (ctx.get("historyProviderConfig")) {
 						const undoDepth = getUndoDepth(ctx);
 						return undoDepth <= 0;
 					}
@@ -67,7 +66,7 @@ export const menuItems: MenuConfigItem[][] = [
 			key: "Redo",
 			disabled: (ctx: Ctx) => {
 				try {
-					if (!!ctx.get("historyProviderConfig")) {
+					if (ctx.get("historyProviderConfig")) {
 						const redoDepth = getRedoDepth(ctx);
 						return redoDepth <= 0;
 					}
@@ -89,7 +88,7 @@ export const menuItems: MenuConfigItem[][] = [
 				{ id: 0, content: "Plain Text" },
 			],
 			// @ts-ignore
-			onSelect: (id: number) => (!!id ? ["WrapInHeading", id] : "TurnIntoText"),
+			onSelect: (id: number) => (id ? ["WrapInHeading", id] : "TurnIntoText"),
 		},
 	],
 	[

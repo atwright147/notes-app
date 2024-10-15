@@ -1,17 +1,14 @@
-import {
-	type MenuConfigItem,
-	// defaultConfigItems,
-	menu,
-	menuConfigCtx,
-} from "@milkdown-lab/plugin-menu";
+import { menu, menuConfigCtx } from "@milkdown-lab/plugin-menu";
 import { Editor, defaultValueCtx, rootCtx } from "@milkdown/kit/core";
 import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { nord } from "@milkdown/theme-nord";
 import type React from "react";
 import "@milkdown-lab/plugin-menu/style.css";
+import { insert, replaceAll } from "@milkdown/kit/utils";
+import { useEffect } from "react";
 
-import { useNotesStore } from "@/stores/notes.store";
+import type { Ctx } from "@milkdown/ctx";
 import { menuItems } from "./menu-items";
 
 interface Props {
@@ -24,7 +21,6 @@ const MilkdownEditor: React.FC<Props> = ({ content }): JSX.Element => {
 			.config(nord)
 			.config((ctx) => {
 				ctx.set(rootCtx, root);
-				ctx.set(defaultValueCtx, content ?? "");
 			})
 			.use(commonmark)
 			.config((ctx) => {
@@ -32,10 +28,14 @@ const MilkdownEditor: React.FC<Props> = ({ content }): JSX.Element => {
 					attributes: { class: "milkdown-menu", "data-menu": "true" },
 					items: menuItems,
 				});
-				// ctx.set(rootCtx, document.querySelector("#app"));
 			})
 			.use(menu),
 	);
+
+	useEffect(() => {
+		const editor = get();
+		editor?.action(replaceAll(content));
+	}, [content, get]);
 
 	return <Milkdown />;
 };
@@ -43,12 +43,9 @@ const MilkdownEditor: React.FC<Props> = ({ content }): JSX.Element => {
 export const MilkdownEditorWrapper: React.FC<Props> = ({
 	content,
 }): JSX.Element => {
-	const { selected, setSelected } = useNotesStore();
-
 	return (
 		<MilkdownProvider>
-			<pre>{JSON.stringify(selected, null, 2)}</pre>
-			<MilkdownEditor content={selected ?? ""} />
+			<MilkdownEditor content={content} />
 		</MilkdownProvider>
 	);
 };
