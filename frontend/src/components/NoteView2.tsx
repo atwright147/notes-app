@@ -5,10 +5,10 @@ import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { nord } from "@milkdown/theme-nord";
 import type React from "react";
 import "@milkdown-lab/plugin-menu/style.css";
+import type { Ctx } from "@milkdown/ctx";
 import { insert, replaceAll } from "@milkdown/kit/utils";
 import { useEffect } from "react";
 
-import type { Ctx } from "@milkdown/ctx";
 import { menuItems } from "./menu-items";
 
 interface Props {
