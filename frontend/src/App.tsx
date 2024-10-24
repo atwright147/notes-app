@@ -1,25 +1,32 @@
-import '@/App.css';
+import "@/App.css";
 
-import { Grid, Provider, View, defaultTheme } from '@adobe/react-spectrum';
-import { FileNav } from './components/FileNav';
-import { NoteView } from './components/NoteView';
-import { useConfigStoreQuery } from './hooks/useConfigStoreQuery';
+import { Grid, Provider, View, defaultTheme } from "@adobe/react-spectrum";
+import Markdown from "react-markdown";
+import { FileNav } from "./components/FileNav";
+import { NoteView } from "./components/NoteView";
+import TipTapMarkdown from "./components/TipTapMarkdown";
+import { useConfigStoreQuery } from "./hooks/useConfigStoreQuery";
 
 export const App = () => {
-	const { data: config, isLoading: isConfigLoading, isError: isConfigError } = useConfigStoreQuery();
+	const {
+		data: config,
+		isLoading: isConfigLoading,
+		isError: isConfigError,
+	} = useConfigStoreQuery();
 
 	return (
 		<Provider theme={defaultTheme} minHeight="100vh">
 			<Grid
-				UNSAFE_style={{ padding: '16px', boxSizing: 'border-box' }}
-				areas={['sidebar content', 'footer  footer']}
-				columns={['250px', '1fr']}
-				rows={['auto', 'min-content']}
+				UNSAFE_style={{ padding: "16px", boxSizing: "border-box" }}
+				areas={["sidebar content", "footer  footer"]}
+				columns={["250px", "1fr"]}
+				rows={["auto", "min-content"]}
 				minHeight="100vh"
 				gap="size-300"
 			>
 				<View gridArea="content">
-					<NoteView />
+					<TipTapMarkdown />
+					<Markdown>{`# Hello, World!`}</Markdown>
 				</View>
 
 				<View gridArea="sidebar" elementType="aside" padding="5px">
