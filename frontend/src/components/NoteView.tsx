@@ -11,6 +11,7 @@ import {
 } from "@adobe/react-spectrum";
 import IconFolder from "@spectrum-icons/workflow/Folder";
 import { useMutation } from "@tanstack/react-query";
+// @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
 import { useEffect, useState } from "react";
 
