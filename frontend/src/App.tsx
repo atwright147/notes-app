@@ -29,7 +29,6 @@ export const App = () => {
 				</View>
 
 				<View gridArea="content">
-					Content
 					<MdEditor />
 				</View>
 
