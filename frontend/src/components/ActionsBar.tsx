@@ -12,7 +12,7 @@ import {
 import DocumentIcon from "@spectrum-icons/workflow/Document";
 import FolderIcon from "@spectrum-icons/workflow/Folder";
 import SettingsIcon from "@spectrum-icons/workflow/Settings";
-import { type FC, useState } from "react";
+import { type FC, JSX, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { OpenDirectoryDialog, SaveFullConfig } from "../../wailsjs/go/main/App";

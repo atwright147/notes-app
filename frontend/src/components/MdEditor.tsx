@@ -21,7 +21,7 @@ import {
 	tablePlugin,
 	toolbarPlugin,
 } from "@mdxeditor/editor";
-import { type FC, useMemo } from "react";
+import { type FC, JSX, useMemo } from "react";
 
 import { useFrontmatter } from "../hooks/useFrontmatter";
 import { useNoteQuery } from "../hooks/useNoteQuery";

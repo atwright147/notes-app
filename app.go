@@ -85,6 +85,16 @@ func (a *App) WalkFrontmatter() ([]Frontmatter, error) {
 
 	folderPath := config.NotesDir
 
+	// Return empty array if notes directory is not set
+	if folderPath == "" {
+		return []Frontmatter{}, nil
+	}
+
+	// Check if the directory exists
+	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
+		return []Frontmatter{}, nil
+	}
+
 	var data []Frontmatter
 
 	err := filepath.WalkDir(folderPath, func(path string, d fs.DirEntry, err error) error {
